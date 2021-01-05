@@ -25,9 +25,7 @@
 #include "mmc_service.h"
 #include "encoding.h"
 #include "mss_mmc.h"
-#include "hal/hw_macros.h"
-
-#define SDIO_REGISTER_ADDRESS    0x4f000000
+#include "mss_gpio.h"
 
 /*
  * MMC doesn't need a "service" to run every super-loop, but it does need to be
@@ -93,7 +91,7 @@ static bool mmc_init_emmc(void)
     SYSREG->IOMUX2_CR = LIBERO_SETTING_IOMUX2_CR_eMMC;
     SYSREG->IOMUX6_CR = LIBERO_SETTING_IOMUX6_CR_eMMC;
 
-    HW_set_uint32(SDIO_REGISTER_ADDRESS,  0);
+    MSS_GPIO_set_output(GPIO2_LO, MSS_GPIO_0, 0);
 
     static mss_mmc_cfg_t emmcConfig =
     {
@@ -123,7 +121,7 @@ static bool mmc_init_sdcard(void)
     SYSREG->IOMUX2_CR = LIBERO_SETTING_IOMUX2_CR_SD;
     SYSREG->IOMUX6_CR = LIBERO_SETTING_IOMUX6_CR_SD;
 
-    HW_set_uint32(SDIO_REGISTER_ADDRESS,  1);
+    MSS_GPIO_set_output(GPIO2_LO, MSS_GPIO_0, 1);
 
     static mss_mmc_cfg_t sdcardConfig =
     {
